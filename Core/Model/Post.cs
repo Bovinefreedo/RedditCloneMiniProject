@@ -4,8 +4,8 @@ public class Post {
     public int Id { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
-    public List<User> Upvotes { get; set; } = new();
-    public List<User> Downvotes { get; set; } = new();   
+    public int Upvotes { get; set; }
+    public int Downvotes { get; set; }   
     public User User { get; set; }
     public DateTime postedTime {get; set;} = DateTime.Now;
     public List<Comment> Comments { get; set; } = new List<Comment>();

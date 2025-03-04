@@ -6,8 +6,8 @@ namespace RedditCloneMiniProjectAPI.Context
     public class PostContext : DbContext
     {
         public DbSet<Post> Posts { get; set; }
-        public DbSet<User> users { get; set; }
-        public DbSet<Comment> comments { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public string DbPath { get; }
 
         public PostContext() {

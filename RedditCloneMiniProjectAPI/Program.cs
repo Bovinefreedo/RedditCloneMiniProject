@@ -89,6 +89,7 @@ using (var db = new PostContext())
             return Results.Ok(result);
         }
     });
+
     app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", (int postId, int commentId) =>
     {
         var result = db.Posts.FirstOrDefault(x => postId == x.Id)?
