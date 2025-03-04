@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Model
 {
-    record class NewPost
+    public record NewPost
     {
         public int userId { get; set; }
         public string title { get; set; } = string.Empty;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Model
 {
-    public class NewComment
+    public record NewComment
     {
         public int userId { get; set; } = -1;
         public int postId { get; set; }
