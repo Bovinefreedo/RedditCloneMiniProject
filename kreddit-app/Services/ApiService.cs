@@ -1,8 +1,5 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
-
-using shared.Model;
 
 namespace kreddit_app.Data;
 
@@ -34,7 +31,7 @@ public class ApiService
     public async Task<Comment> CreateComment(string content, int postId, int userId)
     {
         string url = $"{baseAPI}posts/{postId}/comments";
-     
+
         // Post JSON to API, save the HttpResponseMessage
         HttpResponseMessage msg = await http.PostAsJsonAsync(url, new { content, userId });
 
@@ -42,7 +39,8 @@ public class ApiService
         string json = msg.Content.ReadAsStringAsync().Result;
 
         // Deserialize the JSON string to a Comment object
-        Comment? newComment = JsonSerializer.Deserialize<Comment>(json, new JsonSerializerOptions {
+        Comment? newComment = JsonSerializer.Deserialize<Comment>(json, new JsonSerializerOptions
+        {
             PropertyNameCaseInsensitive = true // Ignore case when matching JSON properties to C# properties 
         });
 
@@ -61,7 +59,8 @@ public class ApiService
         string json = msg.Content.ReadAsStringAsync().Result;
 
         // Deserialize the JSON string to a Post object
-        Post? updatedPost = JsonSerializer.Deserialize<Post>(json, new JsonSerializerOptions {
+        Post? updatedPost = JsonSerializer.Deserialize<Post>(json, new JsonSerializerOptions
+        {
             PropertyNameCaseInsensitive = true // Ignore case when matching JSON properties to C# properties
         });
 

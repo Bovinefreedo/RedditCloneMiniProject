@@ -1,4 +1,4 @@
-namespace shared.Model;
+namespace Core.Model;
 
 public class Comment
 {

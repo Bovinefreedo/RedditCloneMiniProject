@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using shared.Model;
+using Core.Model;
 
-namespace RedditCloneMiniProjectAPI.Model
+namespace RedditCloneMiniProjectAPI.Context
 {
     public class PostContext : DbContext
     {
@@ -17,16 +17,5 @@ namespace RedditCloneMiniProjectAPI.Model
         protected override void OnConfiguring(DbContextOptionsBuilder options)
          => options.UseSqlite($"Data Source={DbPath}");
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Post>()
-                .HasOne(p => p.User);
-
-            modelBuilder.Entity<Post>()
-                .HasMany(p => p.Comments)
-                .WithOne(c => c.User).
-                HasForeignKey(u => u.User.UserId);
-            
-        }
     }
 }

@@ -1,4 +1,4 @@
-namespace shared.Model;
+namespace Core.Model;
 
 public class Post {
     public int Id { get; set; }

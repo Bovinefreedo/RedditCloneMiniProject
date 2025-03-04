@@ -2,8 +2,8 @@ using Microsoft.Extensions.Hosting;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.ComponentModel.Design;
 using System.Xml.Linq;
-using shared.Model;
-using RedditCloneMiniProjectAPI.Model;
+using RedditCloneMiniProjectAPI.Context;
+using Core.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
