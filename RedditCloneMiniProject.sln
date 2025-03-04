@@ -5,6 +5,10 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditCloneMiniProjectAPI", "RedditCloneMiniProjectAPI\RedditCloneMiniProjectAPI.csproj", "{78C7E320-E241-4C68-825E-8FD5D54F692A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kreddit-app", "kreddit-app\kreddit-app.csproj", "{D460C676-DF2C-4822-8C38-CDFB669FFB99}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "shared", "shared\shared.csproj", "{8B55FBD0-EE53-48DF-92CC-245160569BAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{78C7E320-E241-4C68-825E-8FD5D54F692A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78C7E320-E241-4C68-825E-8FD5D54F692A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78C7E320-E241-4C68-825E-8FD5D54F692A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D460C676-DF2C-4822-8C38-CDFB669FFB99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D460C676-DF2C-4822-8C38-CDFB669FFB99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D460C676-DF2C-4822-8C38-CDFB669FFB99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D460C676-DF2C-4822-8C38-CDFB669FFB99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B55FBD0-EE53-48DF-92CC-245160569BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B55FBD0-EE53-48DF-92CC-245160569BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B55FBD0-EE53-48DF-92CC-245160569BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B55FBD0-EE53-48DF-92CC-245160569BAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
