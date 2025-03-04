@@ -1,5 +1,29 @@
-﻿<h3>LoginComponent</h3>
+﻿<nav class="navbar navbar-light bg-light px-3">
+    <div class="ms-auto d-flex align-items-center">
+        @if (currentUser == null)
+        {
+            <InputText @bind-Value="userName" class="form-control form-control-sm me-2" placeholder="Username"></InputText>
+            <button @onclick="Submit" class="btn btn-primary btn-sm">Login</button>
+        }
+        else
+        {
+            <span class="me-2">Logged in as <strong>@currentUser.Username</strong></span>
+            <button @onclick="Logout" class="btn btn-danger btn-sm">Log Out</button>
+        }
+    </div>
+</nav>
+
 
 @code {
-    string userName = string.Empty
+    string userName = string.Empty;
+    User? currentUser = null;
+
+    public void Submit()
+    {
+        currentUser = new User(userName);
+    }
+    public void Logout()
+    {
+        currentUser = null;
+    }
 }
