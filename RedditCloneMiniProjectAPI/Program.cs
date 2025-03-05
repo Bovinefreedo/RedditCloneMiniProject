@@ -5,8 +5,10 @@ using System.Xml.Linq;
 using RedditCloneMiniProjectAPI.Context;
 using Core.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
+using RedditCloneMiniProjectAPI.Repos;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Json;
 
-PostRepo pdb = new();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,7 +21,8 @@ builder.Services.AddScoped<PostRepo>();
 var AllowSomeStuff = "_AllowSomeStuff";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowSomeStuff, builder => {
+    options.AddPolicy(name: AllowSomeStuff, builder =>
+    {
         builder.AllowAnyOrigin()
                .AllowAnyHeader()
                .AllowAnyMethod();
@@ -30,99 +33,112 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<PostContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("ContextSQLite")));
 
+builder.Services.AddScoped<PostRepo>();
+
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    // Her kan man fjerne fejl der opstår, når man returnerer JSON med objekter,
+    // der refererer til hinanden i en cykel.
+    // (altså dobbelrettede associeringer)
+    options.SerializerOptions.ReferenceHandler =
+        System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 var app = builder.Build();
 
+app.UseCors(AllowSomeStuff);
 
-using (var db = new PostContext())
+app.Use(async (context, next) =>
 {
-    app.MapPost("api/posts", (Post post) =>
-    {
-        db.Posts.Add(post);
-        return Results.Ok(post);
-    });
-    app.MapPost("api/posts/{postId}/comments", (int postId, Comment comment) =>
-    {
-        Post? p = db.Posts.FirstOrDefault(x => x.Id == postId);
-        if (p == null)
-        {
-            return Results.BadRequest("Id was not found");
-        }
-        else { 
-            p.Comments.Add(comment);
-            return Results.Ok(comment);
-        }
-    });
-    app.MapGet("api/posts", () => {
-        return Results.Ok(db.Posts.ToList());
-    });
-    app.MapGet("api/posts/{id}", (int id) => { 
-        var result = db.Posts.FirstOrDefault(x => id == x.Id);
-        if (result == null)
-        {
-            return Results.BadRequest("invalid id");
-        }
-        else
-            return Results.Ok(result);
-    });
+    context.Response.ContentType = "application/json; charset=utf-8";
+    await next(context);
+});
 
-    app.MapPut("api/posts/{id}/upvote", (int id) =>
+app.MapPost("api/posts", async (PostRepo repo, NewPost newPost) =>
+{
+    Post post = await repo.CreatePost(newPost);
+    return Results.Ok(post);
+});
+
+app.MapPost("api/posts/{postId}/comments", async (PostRepo repo, int postId, NewComment NewComment) =>
+{
+    Comment comment = await repo.CreateComment(postId, NewComment);
+    return Results.Ok(comment);
+});
+app.MapGet("api/posts", () =>
+{
+    return Results.Ok(db.Posts.ToList());
+});
+app.MapGet("api/posts/{id}", (int id) =>
+{
+    var result = db.Posts.FirstOrDefault(x => id == x.Id);
+    if (result == null)
     {
-        var result = db.Posts.FirstOrDefault(x => id == x.Id);
-        if (result == null)
-        {
-            return Results.BadRequest("invalid id");
-        }
-        else {
-            //result.score += 1;
-            return Results.Ok(result);
-        }
-    });
-    app.MapPut("api/posts/{id}/downvote", (int id) =>
+        return Results.BadRequest("invalid id");
+    }
+    else
+        return Results.Ok(result);
+});
+
+app.MapPut("api/posts/{id}/upvote", (int id) =>
+{
+    var result = db.Posts.FirstOrDefault(x => id == x.Id);
+    if (result == null)
     {
-        var result = db.Posts.FirstOrDefault(x => id == x.Id);
-        if (result == null)
-        {
-            return Results.BadRequest("invalid id");
-        }
-        else
-        {
-            //result.score -= 1;
-            return Results.Ok(result);
-        }
-    });
-    app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", (int postId, int commentId) =>
+        return Results.BadRequest("invalid id");
+    }
+    else
     {
-        var result = db.Posts.FirstOrDefault(x => postId == x.Id)?
-            .Comments.FirstOrDefault(x => commentId == x.Id);
-        if (result == null)
-        {
-            return Results.BadRequest("invalid id");
-        }
-        else
-        {
-            //result.score += 1;
-            return Results.Ok(result);
-        }
-    });
-    app.MapPut("api/posts/{postId}/comments/{commentId}/downvote", (int postId, int commentId) =>
+        //result.score += 1;
+        return Results.Ok(result);
+    }
+});
+app.MapPut("api/posts/{id}/downvote", (int id) =>
+{
+    var result = db.Posts.FirstOrDefault(x => id == x.Id);
+    if (result == null)
     {
-        var result = db.Posts.FirstOrDefault(x => postId == x.Id)?
-            .Comments.FirstOrDefault(x => commentId == x.Id);
-        if (result == null)
-        {
-            return Results.BadRequest("invalid id");
-        }
-        else
-        {
-            //result.score -= 1;
-            return Results.Ok(result);
-        }
-        app.MapPost("api/posts", async (PostRepo repo, NewPost newPost) =>
-    Results.Ok(await repo.CreatePost(newPost))
+        return Results.BadRequest("invalid id");
+    }
+    else
+    {
+        //result.score -= 1;
+        return Results.Ok(result);
+    }
+});
+app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", (int postId, int commentId) =>
+{
+    var result = db.Posts.FirstOrDefault(x => postId == x.Id)?
+        .Comments.FirstOrDefault(x => commentId == x.Id);
+    if (result == null)
+    {
+        return Results.BadRequest("invalid id");
+    }
+    else
+    {
+        //result.score += 1;
+        return Results.Ok(result);
+    }
+});
+app.MapPut("api/posts/{postId}/comments/{commentId}/downvote", (int postId, int commentId) =>
+{
+    var result = db.Posts.FirstOrDefault(x => postId == x.Id)?
+        .Comments.FirstOrDefault(x => commentId == x.Id);
+    if (result == null)
+    {
+        return Results.BadRequest("invalid id");
+    }
+    else
+    {
+        //result.score -= 1;
+        return Results.Ok(result);
+    }
+    app.MapPost("api/posts", async (PostRepo repo, NewPost newPost) =>
+Results.Ok(await repo.CreatePost(newPost))
 );
 
-    });
-}
+});
 
 //GET:
 /// api / posts

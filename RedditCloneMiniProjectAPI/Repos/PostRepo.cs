@@ -15,20 +15,37 @@ namespace RedditCloneMiniProjectAPI.Repos
          
         public async Task<Post> CreatePost(NewPost newPost)
         {
-            var post = new Post { Title = newPost.title, Content = newPost.content };
+            User author = db.Users.FirstOrDefault(u => u.Id == newPost.userId)!;
+            Post post = new Post {  Title = newPost.title, 
+                                    Content = newPost.content, 
+                                    User = author, 
+
+                                };
             db.Posts.Add(post);
             await db.SaveChangesAsync();
             return post;
         }
 
-        public async Task<List<Post>> GetPosts()
+        public async Task<Comment> CreateComment(int postId, NewComment newComment) {
+            var author = await db.Users.FirstOrDefaultAsync(u => u.Id == newComment.userId)!;
+            Comment comment = new Comment { User = author!,
+                                            Content = newComment.comment
+                                          };
+            var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+            db.Comments.Add(comment);
+            post!.Comments.Add(comment);
+            await db.SaveChangesAsync();
+            return comment;
+        }
+
+        public async Task<Post[]> GetPosts()
         {
-            return await db.Posts.ToListAsync();
+            return await db.Posts.ToArrayAsync();
         }
 
         public async Task<Post?> GetPostById(int id)
         {
-            return await db.Posts.FindAsync(id);
+            return await db.Posts.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Post?> UpvotePost(int id)

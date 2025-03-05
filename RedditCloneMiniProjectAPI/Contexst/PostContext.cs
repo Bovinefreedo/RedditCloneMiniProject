@@ -10,12 +10,8 @@ namespace RedditCloneMiniProjectAPI.Context
         public DbSet<Comment> Comments { get; set; }
         public string DbPath { get; }
 
-        public PostContext() {
-            DbPath = "bin/Post.db";
+        public PostContext(DbContextOptions<PostContext> options) : base(options) { 
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-         => options.UseSqlite($"Data Source={DbPath}");
 
     }
 }
