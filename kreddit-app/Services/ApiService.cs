@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+ using System.Net.Http.Json;
 using System.Text.Json;
 using Core.Model;
 
@@ -68,4 +68,16 @@ public class ApiService
         // Return the updated post (vote increased)
         return updatedPost;
     }
+    public async Task<Post> CreatePost(NewPost newPost)
+    {
+        var response = await http.PostAsJsonAsync($"{baseAPI}posts", newPost);
+        return await response.Content.ReadFromJsonAsync<Post>();
+    }
+
+    public async Task<Post> DownvotePost(int id)
+    {
+        var response = await http.PutAsJsonAsync($"{baseAPI}posts/{id}/downvote", "");
+        return await response.Content.ReadFromJsonAsync<Post>();
+    }
+
 }

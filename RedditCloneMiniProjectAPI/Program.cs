@@ -6,6 +6,7 @@ using RedditCloneMiniProjectAPI.Context;
 using Core.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using RedditCloneMiniProjectAPI.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<PostRepo>();
 
 // Sætter CORS så API'en kan bruges fra andre domæner
 var AllowSomeStuff = "_AllowSomeStuff";
@@ -117,6 +119,10 @@ using (var db = new PostContext())
             //result.score -= 1;
             return Results.Ok(result);
         }
+        app.MapPost("api/posts", async (PostRepo repo, NewPost newPost) =>
+    Results.Ok(await repo.CreatePost(newPost))
+);
+
     });
 }
 

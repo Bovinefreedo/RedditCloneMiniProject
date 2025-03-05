@@ -9,6 +9,8 @@ public class Post {
     public User User { get; set; }
     public DateTime postedTime {get; set;} = DateTime.Now;
     public List<Comment> Comments { get; set; } = new List<Comment>();
+    public int Score { get; set; }
+
     public Post(User user, string title = "", string content = "") {
         Title = title;
         Content = content;
