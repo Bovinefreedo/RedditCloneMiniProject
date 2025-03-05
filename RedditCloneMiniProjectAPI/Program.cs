@@ -4,7 +4,9 @@ using System.ComponentModel.Design;
 using System.Xml.Linq;
 using RedditCloneMiniProjectAPI.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
+using RedditCloneMiniProjectAPI.Repos;
 
+PostRepo pdb = new();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -36,7 +38,7 @@ using (var db = new PostContext())
         }
     });
     app.MapGet("api/posts", () => {
-        return Results.Ok(db.Posts.Find());
+        return Results.Ok(db.Posts.ToList());
     });
     app.MapGet("api/posts/{id}", (int id) => { 
         var result = db.Posts.FirstOrDefault(x => id == x.PostId);
@@ -48,31 +50,42 @@ using (var db = new PostContext())
             return Results.Ok(result);
     });
 
-    app.MapPut("api/posts/{id}/upvote", (int id) =>
-    {
-        var result = db.Posts.FirstOrDefault(x => id == x.PostId);
-        if (result == null)
-        {
-            return Results.BadRequest("invalid id");
-        }
-        else {
-            result.score += 1;
-            return Results.Ok(result);
-        }
+    app.MapPut("api/posts/{id}/upvote", (int id) => {
+        var result = pdb.ChangeScorePost(id, 1);
+        return result == null ? Results.BadRequest("invalid id") :Results.Ok(result);
+        });
+
+    app.MapPut("api/posts/{id}/downvote", (int id) => {
+        var result = pdb.ChangeScorePost(id, -1);
+        return result == null ? Results.BadRequest("invalid id") : Results.Ok(result);
     });
-    app.MapPut("api/posts/{id}/downvote", (int id) =>
-    {
-        var result = db.Posts.FirstOrDefault(x => id == x.PostId);
-        if (result == null)
-        {
-            return Results.BadRequest("invalid id");
-        }
-        else
-        {
-            result.score -= 1;
-            return Results.Ok(result);
-        }
-    });
+
+    //app.MapPut("api/posts/{id}/upvote", (int id) =>
+    //{
+    //    var result = db.Posts.FirstOrDefault(x => id == x.PostId);
+    //    if (result == null)
+    //    {
+    //        return Results.BadRequest("invalid id");
+    //    }
+    //    else {
+    //        result.score += 1;
+    //        return Results.Ok(result);
+    //    }
+    //});
+    //app.MapPut("api/posts/{id}/downvote", (int id) =>
+    //{
+    //    var result = db.Posts.FirstOrDefault(x => id == x.PostId);
+    //    if (result == null)
+    //    {
+    //        return Results.BadRequest("invalid id");
+    //    }
+    //    else
+    //    {
+    //        result.score -= 1;
+    //        return Results.Ok(result);
+    //    }
+    //});
+
     app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", (int postId, int commentId) =>
     {
         var result = db.Posts.FirstOrDefault(x => postId == x.PostId)?
