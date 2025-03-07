@@ -98,7 +98,11 @@ app.MapPut("api/posts/{postId}/comments/{commentId}/downvote", async (PostRepo r
 {
     var comment = await repo.ScoreComment(commentId, postId, -1);
     return Results.Ok(comment);
-
+});
+app.MapPost("api/users/{userName}", async (PostRepo repo, string userName) =>
+{
+    var user = await repo.SignInUser(userName);
+    return Results.Ok(user);
 });
 
 //GET:

@@ -76,6 +76,21 @@ namespace RedditCloneMiniProjectAPI.Repos
             comment!.score = comment.score + difference;
             return comment;
         }
+
+        public async Task<User> SignInUser(string userName) { 
+            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == userName);
+            if (user == null)
+            {
+                user = new User() { Username = userName };
+                db.Users.Add(user);
+                db.SaveChanges();
+                return user;
+            }
+            else {
+                return user;
+            }
+
+        }
     }
 }
 
