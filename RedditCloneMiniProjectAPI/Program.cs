@@ -66,77 +66,36 @@ app.MapPost("api/posts/{postId}/comments", async (PostRepo repo, int postId, New
     Comment comment = await repo.CreateComment(postId, NewComment);
     return Results.Ok(comment);
 });
-app.MapGet("api/posts", () =>
+app.MapGet("api/posts", async (PostRepo repo) =>
 {
-    return Results.Ok(db.Posts.ToList());
+    var posts = await repo.GetPosts();
+    return Results.Ok(posts);
 });
-app.MapGet("api/posts/{id}", (int id) =>
+app.MapGet("api/posts/{id}", async (PostRepo repo, int id) =>
 {
-    var result = db.Posts.FirstOrDefault(x => id == x.Id);
-    if (result == null)
-    {
-        return Results.BadRequest("invalid id");
-    }
-    else
-        return Results.Ok(result);
+    var post = await repo.GetPostById(id);
+    return Results.Ok(post);
 });
 
-app.MapPut("api/posts/{id}/upvote", (int id) =>
+app.MapPut("api/posts/{id}/upvote", async (PostRepo repo, int id) =>
 {
-    var result = db.Posts.FirstOrDefault(x => id == x.Id);
-    if (result == null)
-    {
-        return Results.BadRequest("invalid id");
-    }
-    else
-    {
-        //result.score += 1;
-        return Results.Ok(result);
-    }
+    var post= await repo.UpvotePost(id);
+    return Results.Ok(post);
 });
-app.MapPut("api/posts/{id}/downvote", (int id) =>
+
+app.MapPut("api/posts/{id}/downvote", async (PostRepo repo, int id) =>
 {
-    var result = db.Posts.FirstOrDefault(x => id == x.Id);
-    if (result == null)
-    {
-        return Results.BadRequest("invalid id");
-    }
-    else
-    {
-        //result.score -= 1;
-        return Results.Ok(result);
-    }
+   var post = await repo.DownvotePost(id);
+    return Results.Ok(post);
 });
+
 app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", (int postId, int commentId) =>
 {
-    var result = db.Posts.FirstOrDefault(x => postId == x.Id)?
-        .Comments.FirstOrDefault(x => commentId == x.Id);
-    if (result == null)
-    {
-        return Results.BadRequest("invalid id");
-    }
-    else
-    {
-        //result.score += 1;
-        return Results.Ok(result);
-    }
+   
 });
 app.MapPut("api/posts/{postId}/comments/{commentId}/downvote", (int postId, int commentId) =>
 {
-    var result = db.Posts.FirstOrDefault(x => postId == x.Id)?
-        .Comments.FirstOrDefault(x => commentId == x.Id);
-    if (result == null)
-    {
-        return Results.BadRequest("invalid id");
-    }
-    else
-    {
-        //result.score -= 1;
-        return Results.Ok(result);
-    }
-    app.MapPost("api/posts", async (PostRepo repo, NewPost newPost) =>
-Results.Ok(await repo.CreatePost(newPost))
-);
+   
 
 });
 
