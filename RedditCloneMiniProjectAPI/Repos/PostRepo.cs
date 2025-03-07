@@ -50,7 +50,7 @@ namespace RedditCloneMiniProjectAPI.Repos
 
         public async Task<Post?> UpvotePost(int id)
         {
-            var post = await db.Posts.FindAsync(id);
+            var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == id);
             if (post != null)
             {
                 post.Score++;
@@ -61,13 +61,20 @@ namespace RedditCloneMiniProjectAPI.Repos
 
         public async Task<Post?> DownvotePost(int id)
         {
-            var post = await db.Posts.FindAsync(id);
+            var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == id);
             if (post != null)
             {
                 post.Score--;
                 await db.SaveChangesAsync();
             }
             return post;
+        }
+
+        public async Task<Comment> ScoreComment(int commentId, int postId, int difference) {
+            var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+            var comment = post!.Comments.FirstOrDefault(c => c.Id == commentId);
+            comment!.score = comment.score + difference;
+            return comment;
         }
     }
 }

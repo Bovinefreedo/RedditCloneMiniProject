@@ -89,13 +89,15 @@ app.MapPut("api/posts/{id}/downvote", async (PostRepo repo, int id) =>
     return Results.Ok(post);
 });
 
-app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", (int postId, int commentId) =>
+app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", async (PostRepo repo, int postId, int commentId) =>
 {
-   
+    var comment = await repo.ScoreComment(commentId, postId, 1);
+    return Results.Ok(comment);
 });
-app.MapPut("api/posts/{postId}/comments/{commentId}/downvote", (int postId, int commentId) =>
+app.MapPut("api/posts/{postId}/comments/{commentId}/downvote", async (PostRepo repo, int postId, int commentId) =>
 {
-   
+    var comment = await repo.ScoreComment(commentId, postId, -1);
+    return Results.Ok(comment);
 
 });
 
