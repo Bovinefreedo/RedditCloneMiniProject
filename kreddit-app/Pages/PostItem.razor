@@ -9,15 +9,6 @@ See how the links are made in 'PostList.razor'.
 
 <PageTitle>Kreddit</PageTitle>
 
-<style>
-div.contents {
-  background-color: #f2f0eb;
-  width: 600px;
-  border: 2px solid #452d3d;
-  padding: 10px;
-  margin-top: 20px;
-}
-</style>
 
 @if (Post == null)
 {
@@ -38,6 +29,7 @@ else
             <th>User</th>
             <th>Comment</th>
             <th colspan="3">Votes</th>
+            <th>Date</th>
         </tr>
         @foreach (var comment in Post.Comments)
         {

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditCloneMiniProjectAPI", "RedditCloneMiniProjectAPI\RedditCloneMiniProjectAPI.csproj", "{78C7E320-E241-4C68-825E-8FD5D54F692A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditCloneMiniProjectAPI", "RedditCloneMiniProjectAPI\RedditCloneMiniProjectAPI.csproj", "{78C7E320-E241-4C68-825E-8FD5D54F692A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kreddit-app", "kreddit-app\kreddit-app.csproj", "{D460C676-DF2C-4822-8C38-CDFB669FFB99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{3A4FF261-A01A-47EE-9EA9-9BD5C529AAC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{3A4FF261-A01A-47EE-9EA9-9BD5C529AAC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

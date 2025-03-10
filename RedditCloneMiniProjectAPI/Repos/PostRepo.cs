@@ -50,7 +50,9 @@ namespace RedditCloneMiniProjectAPI.Repos
 
         public async Task<Post?> GetPostById(int id)
         {
-            return await db.Posts.Include(p => p.Comments).Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
+            return await db.Posts
+                        .Include(p => p.Comments)
+                        .Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Post?> UpvotePost(int id)

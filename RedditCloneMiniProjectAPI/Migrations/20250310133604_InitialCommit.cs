@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RedditCloneMiniProjectAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class WithUser : Migration
+    public partial class InitialCommit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,6 +60,7 @@ namespace RedditCloneMiniProjectAPI.Migrations
                     Downvotes = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     score = table.Column<int>(type: "INTEGER", nullable: false),
+                    datePosted = table.Column<DateTime>(type: "TEXT", nullable: false),
                     PostId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>

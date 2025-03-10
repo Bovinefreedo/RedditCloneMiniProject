@@ -18,15 +18,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<PostRepo>();
 
 // Sætter CORS så API'en kan bruges fra andre domæner
-var AllowSomeStuff = "AllowSomeStuff";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowSomeStuff, builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
-    });
+    options.AddPolicy("AllowAll",
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
 // Tilføj DbContext factory som service.
@@ -47,7 +45,7 @@ builder.Services.Configure<JsonOptions>(options =>
 
 var app = builder.Build();
 
-app.UseCors(AllowSomeStuff);
+app.UseCors("AllowAll");
 
 app.Use(async (context, next) =>
 {

@@ -4,19 +4,22 @@
 @using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
 
-<LoginComponent></LoginComponent>
+<LoginComponent currentUser="user"></LoginComponent>
 
 @if (posts == null)
 {
     <p><em>Loading...</em></p>
 }
 else
-{
+{   @if(user != null){
+    <button @onclick="() => CreateNewPost()" class="btn btn-primary btn-sm">Create Post</button>
+}
     <table>
         <tr>
             <th>Title</th>
             <th>Content</th>
             <th colspan="3">Votes</th>
+            <th>Date</th>
         </tr>
         @foreach (var post in posts)
         {
@@ -30,16 +33,19 @@ else
                 <td>@(post.Upvotes - post.Downvotes)</td>
                 <td><button @onclick="() => Upvote(post.Id)">Upvote</button></td>
                 <td><button @onclick="() => Downvote(post.Id)">Downvote</button></td>
+                <td>@post.postedTime.DayOfWeek - @post.postedTime.Day - @post.postedTime.Month - @post.postedTime.Year</td>
             </tr>
         }
     </table>
-
     <br/>
+
 }
 
 @code {
     private Post[]? posts;
     private Post? votePost;
+    private bool createPost = false;
+    private User? user = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,5 +60,10 @@ else
     private async void Downvote(int id)
     {
         Console.WriteLine("Not implemented 😪");
+    }
+
+    public void CreateNewPost()
+    {
+        createPost = true;    
     }
 }
