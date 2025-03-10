@@ -31,11 +31,11 @@
         await OnClose.InvokeAsync();
     }
 
-    public async Task<Post?> submitPost()
+    public async void submitPost()
     {
         newPost.userId = userId;
         Post? result = await apiService.CreatePost(newPost);
-        return result;
+        await CloseModal();
     }
 
 }

@@ -12,8 +12,12 @@
 }
 else
 {   @if(user != null){
-    <button @onclick="() => CreateNewPost()" class="btn btn-primary btn-sm">Create Post</button>
-}
+        <button @onclick="() => createPost=true" class="btn btn-primary btn-sm">Create Post</button>
+    }
+    else
+    {
+        <p>log in to post</p>
+    }
     <table>
         <tr>
             <th>Title</th>
@@ -38,6 +42,10 @@ else
         }
     </table>
     <br/>
+    @if (createPost)
+    {
+        <CreatePostComponent OnClose="() => updatePosts()"></CreatePostComponent>
+    }
 
 }
 
@@ -49,7 +57,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await apiService.GetPosts();
+        await updatePosts();
     }
 
     private async void Upvote(int id)
@@ -61,6 +69,12 @@ else
     {
         Console.WriteLine("Not implemented 😪");
     }
+
+    public async Task updatePosts()
+    {
+        posts = await apiService.GetPosts();
+    }
+}
 
     public void CreateNewPost()
     {
