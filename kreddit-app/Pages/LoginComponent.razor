@@ -21,9 +21,9 @@
     public User? currentUser { get; set; }
     public string userName = string.Empty;
 
-    public void Submit()
+    public async Task Submit()
     {
-        currentUser = apiService.
+        currentUser = await apiService.login(userName);
     }
     public void Logout()
     {
