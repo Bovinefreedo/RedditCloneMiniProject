@@ -1,4 +1,6 @@
-﻿<nav class="navbar navbar-light bg-light px-3">
+﻿@inject ApiService apiService;
+
+<nav class="navbar navbar-light bg-light px-3">
     <div class="ms-auto d-flex align-items-center">
         @if (currentUser == null)
         {
@@ -21,7 +23,7 @@
 
     public void Submit()
     {
-        currentUser = new User(userName);
+        currentUser = apiService.
     }
     public void Logout()
     {

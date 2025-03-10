@@ -93,4 +93,9 @@ public class ApiService
         return await response.Content.ReadFromJsonAsync<Post>();
     }
 
+    public async Task<User> login(string username) {
+        var response = await http.PostAsJsonAsync($"{baseAPI}users/{username}/", "");
+        return await response.Content.ReadFromJsonAsync<User>();
+    }
+
 }
