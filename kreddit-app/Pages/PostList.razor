@@ -75,7 +75,7 @@ else
         posts = await apiService.GetPosts();
     }
 
-    public async Task setUser(User? user)
+    public void setUser(User user)
     {
         this.user = user;
         StateHasChanged();
