@@ -17,6 +17,7 @@ else
             <th>Title</th>
             <th>Content</th>
             <th colspan="3">Votes</th>
+            <th>Date</th>
         </tr>
         @foreach (var post in posts)
         {
@@ -30,6 +31,7 @@ else
                 <td>@(post.Upvotes - post.Downvotes)</td>
                 <td><button @onclick="() => Upvote(post.Id)">Upvote</button></td>
                 <td><button @onclick="() => Downvote(post.Id)">Downvote</button></td>
+                <td>@post.postedTime.DayOfWeek - @post.postedTime.Day - @post.postedTime.Month - @post.postedTime.Year</td>
             </tr>
         }
     </table>

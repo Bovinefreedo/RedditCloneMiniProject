@@ -19,9 +19,18 @@ public class ApiService
 
     public async Task<Post[]> GetPosts()
     {
-        string url = $"{baseAPI}posts/";
-        var result = await http.GetFromJsonAsync<Post[]>(url);
-        return 
+        string url = $"{baseAPI}posts";
+        var response = await http.GetAsync(url);
+        Console.WriteLine(response.EnsureSuccessStatusCode);
+        var result = await response.Content.ReadFromJsonAsync<Post[]>();
+        if (result == null)
+        {
+            throw new Exception();
+        }
+        else
+        {
+            return result;
+        }
     }
 
     public async Task<Post> GetPost(int id)
@@ -32,7 +41,7 @@ public class ApiService
 
     public async Task<Comment> CreateComment(string content, int postId, int userId)
     {
-        string url = $"{baseAPI}posts/{postId}/comments";
+        string url = $"{baseAPI}posts/{postId}/comments/";
 
         // Post JSON to API, save the HttpResponseMessage
         HttpResponseMessage msg = await http.PostAsJsonAsync(url, new { content, userId });
@@ -71,13 +80,13 @@ public class ApiService
     }
     public async Task<Post> CreatePost(NewPost newPost)
     {
-        var response = await http.PostAsJsonAsync($"{baseAPI}posts", newPost);
+        var response = await http.PostAsJsonAsync($"{baseAPI}posts/", newPost);
         return await response.Content.ReadFromJsonAsync<Post>();
     }
 
     public async Task<Post> DownvotePost(int id)
     {
-        var response = await http.PutAsJsonAsync($"{baseAPI}posts/{id}/downvote", "");
+        var response = await http.PutAsJsonAsync($"{baseAPI}posts/{id}/downvote/", "");
         return await response.Content.ReadFromJsonAsync<Post>();
     }
 

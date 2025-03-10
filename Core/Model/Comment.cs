@@ -8,6 +8,7 @@ public record Comment
     public int Downvotes { get; set; }
     public User User { get; set; } = new User();
     public int score { get; set; }
+    public DateTime datePosted { get; set; } = DateTime.Now;
     public Comment(string content = "", int upvotes = 0, int downvotes = 0, User user = null)
     {
         Content = content;
