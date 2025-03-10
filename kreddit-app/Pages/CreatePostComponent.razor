@@ -1,0 +1,41 @@
+﻿@inject ApiService apiService;
+
+<div class="modal-overlay" @onclick="CloseModal">
+    <div class="modal-content card shadow bg-white text-dark" @onclick:stopPropagation="true">
+        <div class="card-body">
+            <button type="button" class="btn-close float-end" aria-label="Close" @onclick="CloseModal"></button>
+            <EditForm Model="newPost" OnValidSubmit="submitPost">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <InputText id="title" class="form-control" @bind-Value="newPost.title" />
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <InputTextArea id="content" class="form-control" rows="5" @bind-Value="newPost.content" />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    [Parameter]
+    public int userId { get; set; }
+    private NewPost newPost = new NewPost();
+
+    private async Task CloseModal()
+    {
+        await OnClose.InvokeAsync();
+    }
+
+    public async Task<Post?> submitPost()
+    {
+        newPost.userId = userId;
+        Post? result = await apiService.CreatePost(newPost);
+        return result;
+    }
+
+}

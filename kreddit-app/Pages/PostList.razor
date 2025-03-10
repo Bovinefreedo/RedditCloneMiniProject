@@ -4,14 +4,16 @@
 @using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
 
-<LoginComponent></LoginComponent>
+<LoginComponent currentUser="user"></LoginComponent>
 
 @if (posts == null)
 {
     <p><em>Loading...</em></p>
 }
 else
-{
+{   @if(user != null){
+    <button @onclick="() => CreateNewPost()" class="btn btn-primary btn-sm">Create Post</button>
+}
     <table>
         <tr>
             <th>Title</th>
@@ -42,6 +44,8 @@ else
 @code {
     private Post[]? posts;
     private Post? votePost;
+    private bool createPost = false;
+    private User? user = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,5 +60,10 @@ else
     private async void Downvote(int id)
     {
         Console.WriteLine("Not implemented 😪");
+    }
+
+    public void CreateNewPost()
+    {
+        createPost = true;    
     }
 }

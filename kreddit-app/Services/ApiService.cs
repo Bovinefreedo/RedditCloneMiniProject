@@ -21,11 +21,10 @@ public class ApiService
     {
         string url = $"{baseAPI}posts";
         var response = await http.GetAsync(url);
-        Console.WriteLine(response.EnsureSuccessStatusCode);
         var result = await response.Content.ReadFromJsonAsync<Post[]>();
         if (result == null)
         {
-            throw new Exception();
+            throw new Exception("Array was null, expected an array of posts");
         }
         else
         {
@@ -33,10 +32,19 @@ public class ApiService
         }
     }
 
-    public async Task<Post> GetPost(int id)
+    public async Task<Post?> GetPost(int id)
     {
         string url = $"{baseAPI}posts/{id}/";
         return await http.GetFromJsonAsync<Post>(url);
+    }
+
+    public async Task<Post?> CreatePost(NewPost newPost) { 
+        string url = $"{baseAPI}posts";
+        var result = await http.PostAsJsonAsync(url, newPost);
+        if (result != null) { 
+            return await result.Content.ReadFromJsonAsync<Post>();
+        }
+        throw new Exception("a null object was returned instead of a Post"); 
     }
 
     public async Task<Comment> CreateComment(string content, int postId, int userId)
@@ -77,11 +85,6 @@ public class ApiService
 
         // Return the updated post (vote increased)
         return updatedPost;
-    }
-    public async Task<Post> CreatePost(NewPost newPost)
-    {
-        var response = await http.PostAsJsonAsync($"{baseAPI}posts/", newPost);
-        return await response.Content.ReadFromJsonAsync<Post>();
     }
 
     public async Task<Post> DownvotePost(int id)

@@ -15,8 +15,9 @@
 
 
 @code {
-    string userName = string.Empty;
-    User? currentUser = null;
+    [Parameter]
+    public User? currentUser { get; set; }
+    public string userName = string.Empty;
 
     public void Submit()
     {
