@@ -45,12 +45,12 @@ namespace RedditCloneMiniProjectAPI.Repos
 
         public async Task<Post[]> GetPosts()
         {
-            return await db.Posts.ToArrayAsync();
+            return await db.Posts.Include(p => p.User).Include(p => p.Comments).ToArrayAsync();
         }
 
         public async Task<Post?> GetPostById(int id)
         {
-            return await db.Posts.FirstOrDefaultAsync(p => p.Id == id);
+            return await db.Posts.Include(p => p.Comments).Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Post?> UpvotePost(int id)
@@ -77,7 +77,7 @@ namespace RedditCloneMiniProjectAPI.Repos
 
         public async Task<Comment> ScoreComment(int commentId, int postId, int difference)
         {
-            var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+            var post = await db.Posts.Include(p => p.Comments).FirstOrDefaultAsync(p => p.Id == postId);
             var comment = post!.Comments.FirstOrDefault(c => c.Id == commentId);
             comment!.score = comment.score + difference;
             return comment;
