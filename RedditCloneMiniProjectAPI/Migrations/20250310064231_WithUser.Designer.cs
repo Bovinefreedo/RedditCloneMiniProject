@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedditCloneMiniProjectAPI.Context;
 
@@ -10,9 +11,11 @@ using RedditCloneMiniProjectAPI.Context;
 namespace RedditCloneMiniProjectAPI.Migrations
 {
     [DbContext(typeof(PostContext))]
-    partial class PostContextModelSnapshot : ModelSnapshot
+    [Migration("20250310064231_WithUser")]
+    partial class WithUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
