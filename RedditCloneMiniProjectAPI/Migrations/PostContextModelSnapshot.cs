@@ -39,6 +39,9 @@ namespace RedditCloneMiniProjectAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("datePosted")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("score")
                         .HasColumnType("INTEGER");
 

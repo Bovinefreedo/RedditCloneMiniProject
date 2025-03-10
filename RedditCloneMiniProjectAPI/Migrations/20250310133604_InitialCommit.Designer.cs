@@ -11,8 +11,8 @@ using RedditCloneMiniProjectAPI.Context;
 namespace RedditCloneMiniProjectAPI.Migrations
 {
     [DbContext(typeof(PostContext))]
-    [Migration("20250310093600_WithUser")]
-    partial class WithUser
+    [Migration("20250310133604_InitialCommit")]
+    partial class InitialCommit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace RedditCloneMiniProjectAPI.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("datePosted")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("score")
                         .HasColumnType("INTEGER");
