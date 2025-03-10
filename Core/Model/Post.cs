@@ -16,7 +16,7 @@ public class Post {
         Content = content;
         User = user;
     }
-    public Post() {
+    public Post() { 
         Id = 0;
         Title = "";
         Content = "";
