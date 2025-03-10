@@ -20,7 +20,8 @@ public class ApiService
     public async Task<Post[]> GetPosts()
     {
         string url = $"{baseAPI}posts/";
-        return await http.GetFromJsonAsync<Post[]>(url);
+        var result = await http.GetFromJsonAsync<Post[]>(url);
+        return 
     }
 
     public async Task<Post> GetPost(int id)
