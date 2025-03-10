@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<PostRepo>();
 
 // Sætter CORS så API'en kan bruges fra andre domæner
-var AllowSomeStuff = "_AllowSomeStuff";
+var AllowSomeStuff = "AllowSomeStuff";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowSomeStuff, builder =>
@@ -55,7 +55,7 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
-app.MapPost("api/posts", async (PostRepo repo, NewPost newPost) =>
+app.MapPost("api/posts/", async (PostRepo repo, NewPost newPost) =>
 {
     Post post = await repo.CreatePost(newPost);
     return Results.Ok(post);
@@ -66,40 +66,40 @@ app.MapPost("api/posts/{postId}/comments", async (PostRepo repo, int postId, New
     Comment comment = await repo.CreateComment(postId, NewComment);
     return Results.Ok(comment);
 });
-app.MapGet("api/posts", async (PostRepo repo) =>
+app.MapGet("api/posts/", async (PostRepo repo) =>
 {
-    var posts = await repo.GetPosts();
+    Post[] posts = await repo.GetPosts();
     return Results.Ok(posts);
 });
-app.MapGet("api/posts/{id}", async (PostRepo repo, int id) =>
+app.MapGet("api/posts/{id}/", async (PostRepo repo, int id) =>
 {
     var post = await repo.GetPostById(id);
     return Results.Ok(post);
 });
 
-app.MapPut("api/posts/{id}/upvote", async (PostRepo repo, int id) =>
+app.MapPut("api/posts/{id}/upvote/", async (PostRepo repo, int id) =>
 {
     var post= await repo.UpvotePost(id);
     return Results.Ok(post);
 });
 
-app.MapPut("api/posts/{id}/downvote", async (PostRepo repo, int id) =>
+app.MapPut("api/posts/{id}/downvote/", async (PostRepo repo, int id) =>
 {
    var post = await repo.DownvotePost(id);
     return Results.Ok(post);
 });
 
-app.MapPut("api/posts/{postId}/comments/{commentId}/upvote", async (PostRepo repo, int postId, int commentId) =>
+app.MapPut("api/posts/{postId}/comments/{commentId}/upvote/", async (PostRepo repo, int postId, int commentId) =>
 {
     var comment = await repo.ScoreComment(commentId, postId, 1);
     return Results.Ok(comment);
 });
-app.MapPut("api/posts/{postId}/comments/{commentId}/downvote", async (PostRepo repo, int postId, int commentId) =>
+app.MapPut("api/posts/{postId}/comments/{commentId}/downvote/", async (PostRepo repo, int postId, int commentId) =>
 {
     var comment = await repo.ScoreComment(commentId, postId, -1);
     return Results.Ok(comment);
 });
-app.MapPost("api/users/{userName}", async (PostRepo repo, string userName) =>
+app.MapPost("api/users/{userName}/", async (PostRepo repo, string userName) =>
 {
     var user = await repo.SignInUser(userName);
     return Results.Ok(user);
