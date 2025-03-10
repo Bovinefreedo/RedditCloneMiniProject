@@ -18,15 +18,21 @@
 
 @code {
     [Parameter]
-    public User? currentUser { get; set; }
+    public User? currentUser { get; set;}
+
+    [Parameter]
+    public EventCallback changeUser { get; set; }
+
     public string userName = string.Empty;
 
     public async Task Submit()
     {
         currentUser = await apiService.login(userName);
+        await changeUser.InvokeAsync(currentUser);
     }
-    public void Logout()
+    public async Task Logout()
     {
         currentUser = null;
+        await changeUser.InvokeAsync(currentUser);
     }
 }
