@@ -21,7 +21,7 @@
     public User? currentUser { get; set;}
 
     [Parameter]
-    public EventCallback changeUser { get; set; }
+    public EventCallback<User> changeUser { get; set; }
 
     public string userName = string.Empty;
 
