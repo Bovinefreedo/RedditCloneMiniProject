@@ -11,7 +11,7 @@ using RedditCloneMiniProjectAPI.Context;
 namespace RedditCloneMiniProjectAPI.Migrations
 {
     [DbContext(typeof(PostContext))]
-    [Migration("20250310064231_WithUser")]
+    [Migration("20250310093600_WithUser")]
     partial class WithUser
     {
         /// <inheritdoc />
@@ -102,7 +102,7 @@ namespace RedditCloneMiniProjectAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Core.Model.Comment", b =>

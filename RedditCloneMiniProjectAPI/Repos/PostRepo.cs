@@ -12,25 +12,30 @@ namespace RedditCloneMiniProjectAPI.Repos
         {
             db = context;
         }
-         
+
         public async Task<Post> CreatePost(NewPost newPost)
         {
-            User author = db.Users.FirstOrDefault(u => u.Id == newPost.userId)!;
-            Post post = new Post {  Title = newPost.title, 
-                                    Content = newPost.content, 
-                                    User = author, 
+            User author = db.User.FirstOrDefault(u => u.Id == newPost.userId)!;
+            Post post = new Post
+            {
+                Title = newPost.title,
+                Content = newPost.content,
+                User = author,
 
-                                };
+            };
             db.Posts.Add(post);
             await db.SaveChangesAsync();
             return post;
         }
 
-        public async Task<Comment> CreateComment(int postId, NewComment newComment) {
-            var author = await db.Users.FirstOrDefaultAsync(u => u.Id == newComment.userId)!;
-            Comment comment = new Comment { User = author!,
-                                            Content = newComment.comment
-                                          };
+        public async Task<Comment> CreateComment(int postId, NewComment newComment)
+        {
+            var author = await db.User.FirstOrDefaultAsync(u => u.Id == newComment.userId)!;
+            Comment comment = new Comment
+            {
+                User = author!,
+                Content = newComment.comment
+            };
             var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == postId);
             db.Comments.Add(comment);
             post!.Comments.Add(comment);
@@ -70,26 +75,38 @@ namespace RedditCloneMiniProjectAPI.Repos
             return post;
         }
 
-        public async Task<Comment> ScoreComment(int commentId, int postId, int difference) {
+        public async Task<Comment> ScoreComment(int commentId, int postId, int difference)
+        {
             var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == postId);
             var comment = post!.Comments.FirstOrDefault(c => c.Id == commentId);
             comment!.score = comment.score + difference;
             return comment;
         }
 
-        public async Task<User> SignInUser(string userName) { 
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == userName);
-            if (user == null)
+        public async Task<User> SignInUser(string userName)
+        {
+            try
             {
-                user = new User() { Username = userName };
-                db.Users.Add(user);
+                var user = await db.User.FirstOrDefaultAsync(u => u.Username == userName);
+                if (user == null)
+                {
+                    user = new User() { Username = userName };
+                    db.User.Add(user);
+                    db.SaveChanges();
+                    return user;
+                }
+                else
+                {
+                    return user;
+                }
+            }
+            catch (Exception e)
+            {
+                User user = new User(userName);
+                db.User.Add(user);
                 db.SaveChanges();
                 return user;
             }
-            else {
-                return user;
-            }
-
         }
     }
 }

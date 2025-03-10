@@ -99,7 +99,7 @@ namespace RedditCloneMiniProjectAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Core.Model.Comment", b =>
