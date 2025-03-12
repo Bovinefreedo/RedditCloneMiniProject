@@ -2,13 +2,14 @@
 Notice how this route has a route parameter 'id'. This is how we can pass data to the route.
 See how the links are made in 'PostList.razor'.
 -->
-@page "/post/{id}"
+@page "/post/{postId}/user/{userName}"
 
 @using kreddit_app.Data;
 @inject ApiService apiService
 
 <PageTitle>Kreddit</PageTitle>
 
+<LoginComponent currentUser="User" changeUser="setUser"></LoginComponent>
 
 @if (Post == null)
 {
@@ -46,18 +47,22 @@ else
 
     <!-- This demonstrates how to pass in PostId to the component 'CreateComment'. See how 
          it is used in the file CreateComment.razor -->
-    <CreateComment PostId=@PostId></CreateComment>
+    <CreateComment PostId=@PostId User="User" @key="User"></CreateComment>
 }
 
 @code {
     [Parameter]
-    public string Id { get; set; }
-    public int PostId { get { return int.Parse(Id); } }
+    public string postId { get; set; }
+    [Parameter]
+    public string userName { get; set; }
+    public int PostId { get { return int.Parse(postId); } }
     public Post Post { get; set; }
+    public User? User { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
         Post = await apiService.GetPost(PostId);
+        User = await apiService.login(userName);
     }
     private async void Upvote(int id)
     {
@@ -67,5 +72,11 @@ else
     private async void Downvote(int id)
     {
         Console.WriteLine("Not implemented 😪");
+    }
+
+    public void setUser(User user)
+    {
+        this.User = user;
+        StateHasChanged();
     }
 }

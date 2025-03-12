@@ -44,7 +44,7 @@ else
     <br/>
     @if (createPost)
     {
-        <CreatePostComponent OnClose="() => updatePosts()"></CreatePostComponent>
+        <CreatePostComponent OnClose="() => updatePosts()" user="user" @key="user"></CreatePostComponent>
     }
 
 }
@@ -73,12 +73,16 @@ else
     public async Task updatePosts()
     {
         posts = await apiService.GetPosts();
+        StateHasChanged();
+        createPost = false;
     }
 
     public void setUser(User user)
     {
         this.user = user;
         StateHasChanged();
+        if (user == null)
+            createPost = false;
     }
 
 }

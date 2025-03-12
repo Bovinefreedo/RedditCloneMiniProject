@@ -23,7 +23,7 @@
     [Parameter]
     public EventCallback OnClose { get; set; }
     [Parameter]
-    public int userId { get; set; }
+    public User? user { get; set; }
     private NewPost newPost = new NewPost();
 
     private async Task CloseModal()
@@ -33,8 +33,9 @@
 
     public async void submitPost()
     {
-        newPost.userId = userId;
+        newPost.userId = user!.Id;
         Post? result = await apiService.CreatePost(newPost);
+        newPost = new NewPost();
         await CloseModal();
     }
 

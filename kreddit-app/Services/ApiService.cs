@@ -20,16 +20,7 @@ public class ApiService
     public async Task<Post[]> GetPosts()
     {
         string url = $"{baseAPI}posts";
-        var response = await http.GetAsync(url);
-        var result = await response.Content.ReadFromJsonAsync<Post[]>();
-        if (result == null)
-        {
-            throw new Exception("Array was null, expected an array of posts");
-        }
-        else
-        {
-            return result;
-        }
+        return await http.GetFromJsonAsync<Post[]>(url);
     }
 
     public async Task<Post?> GetPost(int id)
@@ -39,15 +30,15 @@ public class ApiService
     }
 
     public async Task<Post?> CreatePost(NewPost newPost) { 
-        string url = $"{baseAPI}posts";
-        var result = await http.PostAsJsonAsync(url, newPost);
+        string url = $"{baseAPI}posts/";
+        var result = await http.PostAsJsonAsync(url, new { newPost.userId, newPost.title, newPost.content});
         if (result != null) { 
             return await result.Content.ReadFromJsonAsync<Post>();
         }
-        throw new Exception("a null object was returned instead of a Post"); 
+        throw new Exception("a null object was returned instead of a Post");
     }
 
-    public async Task<Comment> CreateComment(string content, int postId, int userId)
+public async Task<Comment> CreateComment(string content, int postId, int userId)
     {
         string url = $"{baseAPI}posts/{postId}/comments/";
 
